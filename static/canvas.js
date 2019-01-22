@@ -13,22 +13,47 @@ function getMouseCoords(event){
 }
 
 
-function drawPoint(cntx, x, y, size){
-	cntx.beginPath();
-	cntx.moveTo(x,y-size);
-	cntx.lineTo(x,y+size);
-	cntx.stroke();
-	cntx.beginPath();
-	cntx.moveTo(x-size,y);
-	cntx.lineTo(x+size,y);
-	cntx.stroke();
+function drawPoint(cntx, x, y, color,size){
+	x = parseInt(x);
+	y = parseInt(y);
+	
+	if(size === undefined){
+		size = 5;
+	}else{
+		size = parseInt(size);
+	}
+	if(color === undefined){
+		color = "black";
+	}
+	if(color === "white"){
+		strokes = 5;
+	}else{
+		strokes = 1;
+	}
+	for (let index = 0; index < strokes; index++) {
+		cntx.beginPath();
+		cntx.strokeStyle = color;
+		cntx.moveTo(x,y-size);
+		cntx.lineTo(x,y+size);
+		cntx.stroke();
+		cntx.beginPath();
+		cntx.moveTo(x-size,y);
+		cntx.lineTo(x+size,y);
+		cntx.stroke();
+	}	
 }
 
 
 document.addEventListener("DOMContentLoaded", function() {
 
-	canvas.width = window.innerWidth * 0.999;
-	canvas.height = window.innerHeight * 0.9;
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight - 75;
+
+	window.addEventListener("resize",function(){
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight - 75;
+	});
+
 
     canvas.addEventListener("mousemove",function(e){
         var coord = getMouseCoords(e);
@@ -39,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	canvas.addEventListener("click", function(e){
 		var coord = getMouseCoords(e);
 		pointList.push(coord);
-		drawPoint(context,coord.x,coord.y,5);
+		drawPoint(context,coord.x,coord.y);
 	});
 
 	canvas.addEventListener("mouseleave", function(){
@@ -49,16 +74,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	document.getElementById("resetList").addEventListener("click", function(){
 		pointList = [];
-		context.restore();
+		context.clearRect(0, 0, canvas.width, canvas.height);
 	});
 
 	document.getElementById("deletePoint").addEventListener("click", function(){
-		pointList.pop();
+		var lastPoint = pointList.pop();
+		drawPoint(context,lastPoint.x,lastPoint.y,"white");
 	});
 
 	document.getElementById("addPoint").addEventListener("click", function(){
-		if(showX.value !== null && showY.value !== null){
+		if(showX.value != "" && showY.value != ""){
 			pointList.push({x:showX.value,y:showY.value});
+			drawPoint(context,showX.value,showY.value);
 		}else{
 			alert("Please input coordinates values for both axes.");
 		}
