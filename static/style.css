@@ -1,6 +1,6 @@
 canvas {
     border: 1px solid black;
-    width: 99.9%;
+    width: 99.8%;
     height: 90vh;
 }
 
@@ -12,6 +12,14 @@ body{
     margin: 0px;
 }
 
-input{
+.coordIn{
     width: 60px;
+}
+
+table {
+	display: inline;
+}
+
+button { 
+	width: 100%;
 }
