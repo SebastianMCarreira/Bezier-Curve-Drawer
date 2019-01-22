@@ -1,4 +1,5 @@
 var canvas = document.querySelector("canvas");
+var context = canvas.getContext("2d");
 var showX = document.getElementById("xCoor");
 var showY = document.getElementById("yCoor");
 showX.value = null;
@@ -12,7 +13,23 @@ function getMouseCoords(event){
 }
 
 
+function drawPoint(cntx, x, y, size){
+	cntx.beginPath();
+	cntx.moveTo(x,y-size);
+	cntx.lineTo(x,y+size);
+	cntx.stroke();
+	cntx.beginPath();
+	cntx.moveTo(x-size,y);
+	cntx.lineTo(x+size,y);
+	cntx.stroke();
+}
+
+
 document.addEventListener("DOMContentLoaded", function() {
+
+	canvas.width = window.innerWidth * 0.999;
+	canvas.height = window.innerHeight * 0.9;
+
     canvas.addEventListener("mousemove",function(e){
         var coord = getMouseCoords(e);
         showX.value = coord.x;
@@ -22,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	canvas.addEventListener("click", function(e){
 		var coord = getMouseCoords(e);
 		pointList.push(coord);
+		drawPoint(context,coord.x,coord.y,5);
 	});
 
 	canvas.addEventListener("mouseleave", function(){
@@ -31,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	document.getElementById("resetList").addEventListener("click", function(){
 		pointList = [];
+		context.restore();
 	});
 
 	document.getElementById("deletePoint").addEventListener("click", function(){
