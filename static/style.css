@@ -15,7 +15,7 @@ body{
 }
 
 .coordIn{
-    width: 60px;
+    width: 41px;
 }
 
 table {
@@ -24,4 +24,19 @@ table {
 
 button { 
 	width: 100%;
+}
+
+#definition {
+	width: 30px;
+}
+
+
+/* Avoid appearing arrows in number inputs */
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+ 
+input[type="number"] {
+    -moz-appearance: textfield;
 }

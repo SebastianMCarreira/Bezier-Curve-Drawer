@@ -90,11 +90,15 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 
+	canvas.addEventListener("mouseenter",function(){
+		showX.blur();
+		showY.blur();
+	});
 
     canvas.addEventListener("mousemove",function(e){
         var coord = getMouseCoords(e);
         showX.value = coord.x;
-        showY.value = coord.y;
+		showY.value = coord.y;
 	});
 	
 	canvas.addEventListener("click", function(e){
@@ -113,11 +117,15 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	document.getElementById("deletePoint").addEventListener("click", function(){
-		pointList.pop();
-		context.clearRect(0, 0, canvas.width, canvas.height);
-		context.drawPoints(pointList);
-		if(seeLines.checked){
-			context.drawLines(pointList);
+		if(pointList.length > 0){
+			pointList.pop();
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.drawPoints(pointList);
+			if(seeLines.checked){
+				context.drawLines(pointList);
+			}
+		}else{
+			alert("There are no points to delete.");
 		}
 	});
 
