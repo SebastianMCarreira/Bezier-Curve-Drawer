@@ -15,7 +15,7 @@ function getMouseCoords(event){
     return {x:parseInt(event.clientX - rect.left),y:parseInt(event.clientY - rect.top)};
 }
 
-CanvasRenderingContext2D.prototype.drawPoint = function(x,y,color,size){
+	CanvasRenderingContext2D.prototype.drawPoint = function(x,y,size, color){
 	x = parseInt(x);
 	y = parseInt(y);
 	
