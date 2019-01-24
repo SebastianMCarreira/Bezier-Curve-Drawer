@@ -20,9 +20,7 @@ function getMouseCoords(event){
 	y = parseInt(y);
 	
 	size = (size===undefined) ? 5 : parseInt(size);
-	if(color === undefined){
-		color = "black";
-	}
+	color = color || "black";
 	
 	this.beginPath();
 	this.strokeStyle = color;
@@ -73,6 +71,25 @@ function newPoint(x,y){
 		pointList.push(lastPoint);
 	}
 	pointList.push({x:x,y:y});
+}
+
+function calculateVector(pointA, pointB, t){
+	const origin = pointA;
+	const direction = {x: pointB.x-pointA.x , y: pointB.y-pointA.y}
+	return {x: origin.x + direction.x * t , y: origin.y + direction.y * t}
+}
+
+function calculateCurvePoint(points, t){
+	if(points.length === 2){
+		return calculateVector(points[0], points[1], t);
+	}else{
+		var newPoints = [];
+		const lines = points.length - 1;
+		for (let index = 0; index < lines; index++) {
+			newPoints.push(calculateVector(points[index],points[index+1],t));
+		}
+		return calculateCurvePoint(newPoints,t);
+	}
 }
 
 
@@ -143,6 +160,18 @@ document.addEventListener("DOMContentLoaded", function() {
 		}else{
 			context.clearRect(0, 0, canvas.width, canvas.height);
 			context.drawPoints(pointList);
+		}
+	});
+
+	document.getElementById("drawCurve").addEventListener("click", function(){
+		if(pointList.length < 3){
+			alert("Please, set at least three points to draw a curve");
+		}else{
+			const step = 1 / document.getElementById("definition").value;
+			for (let t = 0; t <= 1 ; t+=step) {
+				const curvePoint = calculateCurvePoint(pointList, t);
+				context.drawPoint(curvePoint.x,curvePoint.y,2);
+			}
 		}
 	});
 });
