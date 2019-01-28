@@ -7,8 +7,10 @@ showX.value = null;
 showY.value = null;
 
 const seeLines = document.getElementById("seeLines");
+const eraseCurve = document.getElementById("eraseCurve");
 
 var pointList = [];
+var curvePoints = [];
 
 function getMouseCoords(event){
 	var rect = canvas.getBoundingClientRect();
@@ -33,9 +35,10 @@ function getMouseCoords(event){
 	this.stroke();	
 }
 
-CanvasRenderingContext2D.prototype.drawPoints = function(points){
+CanvasRenderingContext2D.prototype.drawPoints = function(points,size){
+	size = size || 5;
 	points.forEach(point => {
-		this.drawPoint(point.x,point.y);
+		this.drawPoint(point.x,point.y,size);
 	});
 }
 
@@ -105,6 +108,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		if(seeLines.checked){
 			context.drawLines(pointList);
 		}
+		if(!eraseCurve.disabled){
+			context.drawPoints(curvePoints,2);
+		}
 	});
 
 	canvas.addEventListener("mouseenter",function(){
@@ -119,6 +125,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 	
 	canvas.addEventListener("click", function(e){
+		if(!eraseCurve.disabled){
+			if(confirm("Do you wish to erase the current curve and set the new point or keep the curve and not set a point?")){
+
+			}
+		}
 		var newCoord = getMouseCoords(e);
 		newPoint(newCoord.x,newCoord.y);
 	});
@@ -130,6 +141,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	document.getElementById("resetList").addEventListener("click", function(){
 		pointList = [];
+		curveDrawed = false;
+		curvePoints = [];
 		context.clearRect(0, 0, canvas.width, canvas.height);
 	});
 
@@ -171,7 +184,10 @@ document.addEventListener("DOMContentLoaded", function() {
 			for (let t = 0; t <= 1 ; t+=step) {
 				const curvePoint = calculateCurvePoint(pointList, t);
 				context.drawPoint(curvePoint.x,curvePoint.y,2);
+				curvePoints.push(curvePoint);
 			}
+			curveDrawed = true;
+			eraseCurve.disabled = false;
 		}
 	});
 });
