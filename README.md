@@ -23,3 +23,9 @@ You may want to see the strokes to know exactly what's the order of the points. 
 By default, only 20 points of the curve will be calculated, you can change that by placing the amount you want in the "Curve Points" labeled input. I have tested this with up to 10 000 points without any performance issues and at this point, the curve will already be rendered as a thick line so trying more is usless.
 
 Once you set every point, click "Draw Curve" and every point will be calculated and rendered in the canvas. You can then click "Erase Cruve" if you want to edit the points to draw a similar curve instead.
+
+## Features
+
+* Vanilla JavaScript: This project does not includes any popular JavaScript library like jQuery or P5.js.
+* Small Size: All three needed files add up to only 5,6 KB (once minified).
+* HTML5 Canvas: The curve and points are rendered in a HTML5 canvas using some purpose-built methods added to it's 2D context like drawPoint and simpleLine.
