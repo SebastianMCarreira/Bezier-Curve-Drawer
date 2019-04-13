@@ -9,13 +9,14 @@ showY.value = null;
 const seeLines = document.getElementById("seeLines");
 
 var pointList = [];
+var curvePointList = [];
 
 function getMouseCoords(event){
 	var rect = canvas.getBoundingClientRect();
     return {x:parseInt(event.clientX - rect.left),y:parseInt(event.clientY - rect.top)};
 }
 
-	CanvasRenderingContext2D.prototype.drawPoint = function(x,y,size, color){
+CanvasRenderingContext2D.prototype.drawPoint = function(x,y,size, color){
 	x = parseInt(x);
 	y = parseInt(y);
 	
@@ -92,6 +93,13 @@ function calculateCurvePoint(points, t){
 	}
 }
 
+function redrawWithoutCurve(){
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	context.drawPoints(pointList);
+	if(seeLines.checked){
+		context.drawLines(pointList);
+	}
+}
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -101,10 +109,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	window.addEventListener("resize",function(){
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight - 75;
-		context.drawPoints(pointList);
-		if(seeLines.checked){
-			context.drawLines(pointList);
-		}
+		redrawWithoutCurve();
+		curvePointList.forEach(function(curvePoint){
+			context.drawPoint(curvePoint.x,curvePoint.y,2);
+		});
 	});
 
 	canvas.addEventListener("mouseenter",function(){
@@ -130,6 +138,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	document.getElementById("resetList").addEventListener("click", function(){
 		pointList = [];
+		curvePointList = [];
 		context.clearRect(0, 0, canvas.width, canvas.height);
 	});
 
@@ -155,12 +164,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	seeLines.addEventListener("change", function(){
-		if(this.checked){
-			context.drawLines(pointList);
-		}else{
-			context.clearRect(0, 0, canvas.width, canvas.height);
-			context.drawPoints(pointList);
-		}
+		redrawWithoutCurve();
 	});
 
 	document.getElementById("drawCurve").addEventListener("click", function(){
@@ -170,9 +174,15 @@ document.addEventListener("DOMContentLoaded", function() {
 			const step = 1 / document.getElementById("definition").value;
 			for (let t = 0; t <= 1 ; t+=step) {
 				const curvePoint = calculateCurvePoint(pointList, t);
+				curvePointList.push(curvePoint);
 				context.drawPoint(curvePoint.x,curvePoint.y,2);
 			}
 		}
+	});
+
+	document.getElementById("eraseCurve").addEventListener("click", function(){
+		curvePointList = [];
+		redrawWithoutCurve();
 	});
 });
 
