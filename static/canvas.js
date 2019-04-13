@@ -7,6 +7,7 @@ showX.value = null;
 showY.value = null;
 
 const seeLines = document.getElementById("seeLines");
+const eraseCurve = document.getElementById("eraseCurve");
 
 var pointList = [];
 var curvePointList = [];
@@ -34,9 +35,10 @@ CanvasRenderingContext2D.prototype.drawPoint = function(x,y,size, color){
 	this.stroke();	
 }
 
-CanvasRenderingContext2D.prototype.drawPoints = function(points){
+CanvasRenderingContext2D.prototype.drawPoints = function(points,size){
+	size = size || 5;
 	points.forEach(point => {
-		this.drawPoint(point.x,point.y);
+		this.drawPoint(point.x,point.y,size);
 	});
 }
 
@@ -177,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				curvePointList.push(curvePoint);
 				context.drawPoint(curvePoint.x,curvePoint.y,2);
 			}
+			eraseCurve.disabled = false;
 		}
 	});
 
